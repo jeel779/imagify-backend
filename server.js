@@ -31,4 +31,4 @@ app.use((req, res, next) => {
 app.use("/api/user",userRouter)
 app.use('/api/image',imageRouter)
 
-module.exports=app
+export default app
