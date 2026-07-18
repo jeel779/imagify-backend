@@ -1,34 +1,19 @@
-import express from "express"
-import cors from "cors"
-import 'dotenv/config'
-import connectDB from "./config/mongodb.js"
-import userRouter from "./routes/userRoutes.js"
-import imageRouter from "./routes/imageRoutes.js"
+import express from "express";
+import cors from "cors";
+import 'dotenv/config';
+import userRouter from "./routes/userRoutes.js";
+import imageRouter from "./routes/imageRoutes.js";
 
-const PORT=process.env.PORT || 4000
-const app=express()
+const app = express();
 
-app.use(cors())
-app.use(express.json())
-let isConnected=false
-async function connectToMongoDB() {
-  try {
-    await connectDB()
-    isConnected = true;
-    console.log('Connected to MongoDB');
-  } catch (error) {
-    console.error('Error connecting to MongoDB:', error);
-  }
-}
+app.use(cors());
+app.use(express.json());
 
-app.use(async (req, res, next) => {
-  if (!isConnected) {
-    await connectToMongoDB();
-  }
-  next();
+app.use("/api/user", userRouter);
+app.use('/api/image', imageRouter);
+
+app.get('/test', (req, res) => {
+  res.send('API is working fine (database-less mode)');
 });
 
-app.use("/api/user",userRouter)
-app.use('/api/image',imageRouter)
-
-export default app
+export default app;
